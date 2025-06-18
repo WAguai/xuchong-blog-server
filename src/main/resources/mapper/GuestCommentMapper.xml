@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xuchong.blog.server.mapper.GuestCommentMapper">
+    <resultMap id="OneGuestCommentResultMap" type="com.xuchong.blog.pojo.entity.OneGuestComment">
+        <result property="id" column="id"/>
+        <result property="guestBookId" column="guest_book_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <resultMap id="GuestCommentsResultMap" type="com.xuchong.blog.pojo.entity.GuestComments">
+        <result property="guestBookId" column="guest_book_id"/>
+        <collection
+                property="guestComments"
+                resultMap="OneGuestCommentResultMap"
+        />
+    </resultMap>
+
+
+<!--    <select id="selectCommentsByGuestBookIds" resultType="com.xuchong.blog.pojo.entity.OneGuestComment">-->
+    <select id="selectCommentsByGuestBookIds" resultMap="GuestCommentsResultMap">
+        SELECT gc.*,u.nick_name
+        FROM guest_comment as gc LEFT JOIN user as u ON gc.user_id = u.id
+        WHERE gc.guest_book_id
+        IN
+        <foreach collection='guestBookIds' item='guestBookId'  open='(' separator=',' close=')'>
+                #{guestBookId}
+        </foreach>
+        ORDER BY gc.create_time ASC
+    </select>
+
+
+
+</mapper>

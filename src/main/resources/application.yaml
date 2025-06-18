@@ -1,0 +1,76 @@
+spring:
+  application:
+    name: xuchong-blog
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/xuchong_blog?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+    database: xuchong_blog
+
+  jackson:
+    default-property-inclusion: non_null # JSON?????????
+  data:
+    redis:
+      host: localhost
+      database: 2
+      port: 6381
+      password: 123456
+      auth: 123456
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 10
+          min-idle: 1
+          time-between-eviction-runs: 10s
+
+  #邮箱验证码配置
+  mail:
+    #smtp服务主机  qq邮箱则为smtp.qq.com; 163邮箱是smtp.163.com
+    host: smtp.qq.com
+    #服务协议
+    protocol: smtp
+    # 编码集
+    default-encoding: UTF-8
+    #发送邮件的账户
+    username: xuchongong@qq.com
+    #授权码
+    password: kgndxybqberxcdch
+
+    # 昵称
+    nickname: 羽中羽中
+
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+mybatis-plus:
+  type-aliases-package: com.xuchong.blog.pojo.entity # ?????
+  configuration:
+    #开启驼峰命名
+    map-underscore-to-camel-case: true
+
+
+xuchong-blog:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    admin-secret-key: yuzhongyuzhongyuzhongyuzhongyuzhong
+    # 设置jwt过期时间
+    admin-ttl: 7200000000
+    # 设置jwt签名加密时使用的秘钥
+    user-secret-key: usersusersusersusersusersusersusersusers
+    # 设置jwt过期时间
+    user-ttl: 7200000000
+
+    # 设置前端传递过来的令牌名称
+    token-name: Authorization
+
+  alioss:
+    endpoint: ${sky.alioss.endpoint}
+    access-key-id: ${sky.alioss.access-key-id}
+    access-key-secret: ${sky.alioss.access-key-secret}
+    bucket-name: ${sky.alioss.bucket-name}
