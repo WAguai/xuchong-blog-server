@@ -3,7 +3,7 @@ package com.xuchong.blog.server.service.Impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xuchong.blog.common.result.Result;
 import com.xuchong.blog.pojo.dto.AddGuestCommentDTO;
-import com.xuchong.blog.pojo.entity.GuestComment;
+import com.xuchong.blog.pojo.entity.db.GuestComment;
 
 import com.xuchong.blog.pojo.vo.AddGuestCommentVO;
 import com.xuchong.blog.server.mapper.GuestCommentMapper;

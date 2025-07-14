@@ -2,7 +2,7 @@ package com.xuchong.blog.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xuchong.blog.pojo.entity.GuestBook;
+import com.xuchong.blog.pojo.entity.db.GuestBook;
 import com.xuchong.blog.pojo.entity.OneGuestBook;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

@@ -1,5 +1,4 @@
-package com.xuchong.blog.pojo.entity;
-
+package com.xuchong.blog.pojo.entity.db;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -11,11 +10,10 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("guest_book")
-public class GuestBook {
+@TableName("moment_like")
+public class MomentLike {
     private Integer id;
+    private Integer momentId;
     private Integer userId;
-    private String message;
     private LocalDateTime createTime;
-    private LocalDateTime updateTime;
 }

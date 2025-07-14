@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xuchong.blog.server.mapper.MomentLikesMapper">
+
+    <resultMap id="OneMomentLikeResultMap" type="com.xuchong.blog.pojo.entity.OneMomentLike">
+        <result property="id" column="id"/>
+        <result property="momentId" column="moment_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <resultMap id="MomentLikesResultMap" type="com.xuchong.blog.pojo.entity.MomentLikes">
+        <result property="momentId" column="moment_id"/>
+        <collection
+                property="momentLikes"
+                resultMap="OneMomentLikeResultMap"
+        />
+    </resultMap>
+<!--    <select id="selectCommentsByGuestBookIds" resultType="com.xuchong.blog.pojo.entity.OneGuestComment">-->
+
+    <select id="selectLikesByMomentIds" resultMap="MomentLikesResultMap">
+        SELECT ml.*,u.nick_name
+        FROM moment_like as ml LEFT JOIN user as u ON ml.user_id = u.id
+        WHERE ml.moment_id
+        IN
+        <foreach collection='momentIds' item='momentId'  open='(' separator=',' close=')'>
+            #{momentId}
+        </foreach>
+        ORDER BY ml.create_time ASC
+    </select>
+
+
+
+</mapper>

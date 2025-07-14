@@ -37,6 +37,7 @@
         <aliyun.sdk.oss>3.10.2</aliyun.sdk.oss>
         <druid>1.2.1</druid>
         <mybatis-plus>3.5.12</mybatis-plus>
+        <jsqlparser>3.5.12</jsqlparser>
     </properties>
     <dependencies>
         <dependency>
@@ -80,7 +81,12 @@
             <artifactId>jjwt</artifactId>
             <version>${jjwt}</version>
         </dependency>
-
+        <!-- 分页插件依赖 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
+            <version>${jsqlparser}</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

@@ -1,4 +1,4 @@
-package com.xuchong.blog.pojo.entity;
+package com.xuchong.blog.pojo.entity.db;
 
 
 import com.baomidou.mybatisplus.annotation.TableName;

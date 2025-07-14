@@ -58,15 +58,9 @@ mybatis-plus:
 xuchong-blog:
   jwt:
     # 设置jwt签名加密时使用的秘钥
-    admin-secret-key: yuzhongyuzhongyuzhongyuzhongyuzhong
+    secret-key: yuzhongyuzhongyuzhongyuzhongyuzhong
     # 设置jwt过期时间
-    admin-ttl: 7200000000
-    # 设置jwt签名加密时使用的秘钥
-    user-secret-key: usersusersusersusersusersusersusersusers
-    # 设置jwt过期时间
-    user-ttl: 7200000000
-
-    # 设置前端传递过来的令牌名称
+    ttl: 7200000000
     token-name: Authorization
 
   alioss:

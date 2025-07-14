@@ -1,9 +1,7 @@
 package com.xuchong.blog.pojo.vo;
 
-import com.xuchong.blog.pojo.entity.GuestBook;
 import com.xuchong.blog.pojo.entity.OneGuestBook;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.List;
 

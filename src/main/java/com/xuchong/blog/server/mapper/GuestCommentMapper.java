@@ -1,7 +1,7 @@
 package com.xuchong.blog.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xuchong.blog.pojo.entity.GuestComment;
+import com.xuchong.blog.pojo.entity.db.GuestComment;
 import com.xuchong.blog.pojo.entity.GuestComments;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.apache.ibatis.annotations.MapKey;

@@ -8,7 +8,7 @@ import com.xuchong.blog.common.result.Result;
 import com.xuchong.blog.common.utils.JwtUtil;
 import com.xuchong.blog.pojo.dto.LoginDTO;
 import com.xuchong.blog.pojo.dto.RegisterDTO;
-import com.xuchong.blog.pojo.entity.User;
+import com.xuchong.blog.pojo.entity.db.User;
 import com.xuchong.blog.common.constant.JwtClaimsConstant;
 import com.xuchong.blog.pojo.vo.LoginVO;
 import com.xuchong.blog.server.mapper.UserMapper;
@@ -17,7 +17,6 @@ import com.xuchong.blog.server.service.VerifyService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -65,8 +64,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
         // 7. 写入数据库
         this.save(user);
-
         LoginVO userLoginVO = generateJWTToken(user);
+        BaseContext.setCurrentId(user.getId());
+        BaseContext.setIsAdmin(user.getIsAdmin().equals("1"));
         return Result.success(userLoginVO);
     }
 
@@ -84,6 +84,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
             return Result.error("账户或密码错误");
         }
         LoginVO userLoginVO = generateJWTToken(user);
+        BaseContext.setCurrentId(user.getId());
+        BaseContext.setIsAdmin(user.getIsAdmin().equals("1"));
         return Result.success(userLoginVO);
     }
 
@@ -97,7 +99,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
     @Override
     public Result<?> getIsAdmin() {
-        Long userId = BaseContext.getCurrentId();
+        Integer userId = BaseContext.getCurrentId();
         User user = query().eq("id", userId).one();
         if(user == null){
             return Result.error("用户不存在");
@@ -116,14 +118,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         claims.put(JwtClaimsConstant.USER_NICK_NAME,user.getNickName());
 //        claims.put(JwtClaimsConstant.IS_ADMIN,user.getIsAdmin());
         String token;
-        if(user.getIsAdmin().equals("1")) {
-            token = JwtUtil.createJWT(jwtProperties.getAdminSecretKey(), jwtProperties.getAdminTtl(), claims);
-            BaseContext.setIsAdmin(true);
-        }
-        else {
-            token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), claims);
-            BaseContext.setIsAdmin(false);
-        }
+        token = JwtUtil.createJWT(jwtProperties.getSecretKey(), jwtProperties.getTtl(), claims);
         return LoginVO.builder()
             .id(user.getId())
             .token(token)
