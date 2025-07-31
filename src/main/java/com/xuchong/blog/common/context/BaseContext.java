@@ -10,9 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 public class BaseContext {
 
     private static ThreadLocal<Integer> threadLocal = new ThreadLocal<>();
-    @Getter
-    @Setter
-    private static Boolean isAdmin = false;
 
     public static void setCurrentId(Integer id) {
         threadLocal.set(id);

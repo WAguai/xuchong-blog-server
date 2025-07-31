@@ -65,8 +65,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         // 7. 写入数据库
         this.save(user);
         LoginVO userLoginVO = generateJWTToken(user);
-        BaseContext.setCurrentId(user.getId());
-        BaseContext.setIsAdmin(user.getIsAdmin().equals("1"));
         return Result.success(userLoginVO);
     }
 
@@ -84,21 +82,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
             return Result.error("账户或密码错误");
         }
         LoginVO userLoginVO = generateJWTToken(user);
-        BaseContext.setCurrentId(user.getId());
-        BaseContext.setIsAdmin(user.getIsAdmin().equals("1"));
         return Result.success(userLoginVO);
     }
 
     @Override
     public Result<?> logout() {
-        BaseContext.removeCurrentId();
-        BaseContext.setIsAdmin(false);
         log.info("登出成功");
         return Result.success();
     }
 
     @Override
     public Result<?> getIsAdmin() {
+        if(BaseContext.getCurrentId() == null){
+            return Result.error("未登录，无法获取管理员信息");
+        }
         Integer userId = BaseContext.getCurrentId();
         User user = query().eq("id", userId).one();
         if(user == null){
