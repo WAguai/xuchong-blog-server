@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   application:
     name: xuchong-blog
   datasource:
@@ -64,7 +66,7 @@ xuchong-blog:
     token-name: Authorization
 
   alioss:
-    endpoint: ${sky.alioss.endpoint}
-    access-key-id: ${sky.alioss.access-key-id}
-    access-key-secret: ${sky.alioss.access-key-secret}
-    bucket-name: ${sky.alioss.bucket-name}
+    endpoint: ${xuchong-blog.alioss.endpoint}
+    access-key-id: ${xuchong-blog.alioss.access-key-id}
+    access-key-secret: ${xuchong-blog.alioss.access-key-secret}
+    bucket-name: ${xuchong-blog.alioss.bucket-name}

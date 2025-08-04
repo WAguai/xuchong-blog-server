@@ -7,7 +7,6 @@ import com.aliyun.oss.OSSException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
 
@@ -66,5 +65,26 @@ public class AliOssUtil {
         log.info("文件上传到:{}", stringBuilder.toString());
 
         return stringBuilder.toString();
+    }
+
+    public void delete(String objectName) {
+        // 创建OSSClient实例。
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        try {
+            // 删除文件。
+            log.info(objectName);
+            ossClient.deleteObject(bucketName, objectName);
+            log.info("删除文件成功:{}", objectName);
+        } catch (OSSException oe) {
+            log.error("Caught an OSSException: {}", oe.getErrorMessage());
+            throw new RuntimeException("删除OSS文件失败: " + oe.getErrorMessage());
+        } catch (ClientException ce) {
+            log.error("Caught an ClientException: {}", ce.getMessage());
+            throw new RuntimeException("删除OSS文件失败: " + ce.getMessage());
+        } finally {
+            if (ossClient != null) {
+                ossClient.shutdown();
+            }
+        }
     }
 }

@@ -15,8 +15,9 @@ import java.util.List;
 public class Moment {
     private Integer id;
     private Integer userId;
+    private String title;
     private String content;
-    private List<String> images;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
+    private Boolean deleted = false;
 }

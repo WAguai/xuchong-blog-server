@@ -1,7 +1,6 @@
 package com.xuchong.blog.server.config;
 
 
-import com.xuchong.blog.common.context.BaseContext;
 import com.xuchong.blog.server.interceptor.JwtTokenInterceptor;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +31,9 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(jwtTokenInterceptor)
                 .addPathPatterns("/user/logout")
                 .addPathPatterns("/user/getIsAdmin")
-                .addPathPatterns("/moment/likeOrDislike/**");
+                .addPathPatterns("/moment/likeOrDislike/**")
+                .addPathPatterns("/momentComment/**")
+                .addPathPatterns("/admin/**");
     }
 
 

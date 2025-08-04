@@ -1,17 +1,16 @@
 package com.xuchong.blog.server.service.Impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xuchong.blog.common.context.BaseContext;
 import com.xuchong.blog.common.result.Result;
+import com.xuchong.blog.pojo.dto.AddMomentCommentDTO;
+import com.xuchong.blog.pojo.dto.AddMomentDTO;
 import com.xuchong.blog.pojo.entity.*;
-import com.xuchong.blog.pojo.entity.db.GuestComment;
-import com.xuchong.blog.pojo.entity.db.Moment;
-import com.xuchong.blog.pojo.entity.db.MomentLike;
-import com.xuchong.blog.pojo.entity.db.User;
+import com.xuchong.blog.pojo.entity.db.*;
+import com.xuchong.blog.pojo.vo.AddMomentCommentVO;
 import com.xuchong.blog.pojo.vo.GetMomentDetailsVO;
 import com.xuchong.blog.pojo.vo.GetMomentVO;
 import com.xuchong.blog.server.mapper.*;
@@ -121,7 +120,7 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment>  implem
     @Override
     public Result<?> likeOrDislike(Integer momentId) {
         Integer userId = BaseContext.getCurrentId();
-        QueryWrapper<MomentLike> wrapper = new QueryWrapper<MomentLike>();
+        QueryWrapper<MomentLike> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id",userId);//相当于where id=1
         wrapper.eq("moment_id",momentId);//相当于where id=1
         MomentLike momentLike = momentLikesMapper.selectOne(wrapper);
@@ -140,5 +139,63 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment>  implem
             momentLikesMapper.deleteById(momentLike.getId());
             return Result.success("取消点赞成功");
         }
+    }
+
+    @Override
+    public Result<?> addMomentComment(AddMomentCommentDTO addMomentCommentDTO) {
+        Integer userId = BaseContext.getCurrentId();
+        
+        MomentComment momentComment = new MomentComment();
+        momentComment.setMomentId(addMomentCommentDTO.getMomentId());
+        momentComment.setUserId(userId);
+        momentComment.setContent(addMomentCommentDTO.getContent());
+        momentComment.setCreateTime(LocalDateTime.now());
+        momentComment.setUpdateTime(LocalDateTime.now());
+        momentCommentMapper.insert(momentComment);
+        User user = userMapper.selectById(userId);
+        AddMomentCommentVO addMomentCommentVO = new AddMomentCommentVO();
+        BeanUtils.copyProperties(momentComment, addMomentCommentVO);
+        addMomentCommentVO.setNickName(user.getNickName());
+        return Result.success(addMomentCommentVO);
+    }
+
+    @Override
+    public Result<?> addMoment(AddMomentDTO addMomentDTO) {
+        Integer userId = BaseContext.getCurrentId();
+        Moment moment = new Moment();
+        moment.setUserId(userId);
+        moment.setTitle(addMomentDTO.getTitle());
+        moment.setContent(addMomentDTO.getContent());
+//        moment.setImages(""); // 不再单独存储图片，内容中包含Markdown格式的图片
+        moment.setCreateTime(LocalDateTime.now());
+        moment.setUpdateTime(LocalDateTime.now());
+        
+        momentMapper.insert(moment);
+        
+        return Result.success(moment);
+    }
+
+    @Override
+    public Result<?> updateMoment(AddMomentDTO addMomentDTO) {
+        Integer userId = BaseContext.getCurrentId();
+        
+        // 检查说说是否存在
+        Moment existingMoment = momentMapper.selectById(addMomentDTO.getId());
+        if (existingMoment == null) {
+            return Result.error("说说不存在或已被删除");
+        }
+        
+        // 检查权限 - 只能更新自己的说说
+        if (!existingMoment.getUserId().equals(userId)) {
+            return Result.error("无权更新他人的说说");
+        }
+        
+        existingMoment.setTitle(addMomentDTO.getTitle());
+        existingMoment.setContent(addMomentDTO.getContent());
+        existingMoment.setUpdateTime(LocalDateTime.now());
+        
+        momentMapper.updateById(existingMoment);
+        
+        return Result.success(existingMoment);
     }
 }
