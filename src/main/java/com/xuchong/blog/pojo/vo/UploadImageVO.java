@@ -5,7 +5,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class UploadImageVO {
-    String id;
     String url;
     String filename;
 }

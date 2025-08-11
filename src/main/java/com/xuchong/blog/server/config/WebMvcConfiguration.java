@@ -20,7 +20,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Resource
     private JwtTokenInterceptor jwtTokenInterceptor;
 
-
     /**
      * 注册自定义拦截器
      *
