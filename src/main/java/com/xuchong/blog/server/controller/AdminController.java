@@ -4,7 +4,9 @@ import com.xuchong.blog.common.context.BaseContext;
 import com.xuchong.blog.common.result.Result;
 import com.xuchong.blog.common.utils.AliOssUtil;
 import com.xuchong.blog.pojo.dto.AddMomentDTO;
+import com.xuchong.blog.pojo.dto.AddPhotoDTO;
 import com.xuchong.blog.pojo.entity.db.User;
+import com.xuchong.blog.pojo.vo.PhotoVO;
 import com.xuchong.blog.server.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +34,8 @@ public class AdminController {
     private UserService userService;
     @Resource
     private OssService ossService;
+    @Resource
+    private PhotoService photoService;
 
 
     @Operation(summary = "添加说说")
@@ -74,11 +78,7 @@ public class AdminController {
         return momentService.getMomentDetails(id);
     }
 
-    private Boolean isAdmin(){
-        Integer userId = BaseContext.getCurrentId();
-        User user = userService.query().eq("id", userId).one();
-        return user != null && user.getIsAdmin().equals("1");
-    }
+
 
 
     @Operation(summary = "上传图片")
@@ -92,5 +92,29 @@ public class AdminController {
     @DeleteMapping("/common/deleteImage")
     public Result<?> deleteImage(@RequestParam String fileName) {
         return ossService.delete(fileName);
+    }
+
+
+    @PostMapping("photo/add")
+    @Operation(summary = "添加照片")
+    public Result<PhotoVO> addPhoto(@RequestBody AddPhotoDTO addPhotoDTO) {
+        log.info("添加照片: {}", addPhotoDTO);
+        PhotoVO photoVO = photoService.addPhoto(addPhotoDTO);
+        return Result.success(photoVO);
+    }
+
+    @DeleteMapping("photo/{id}")
+    @Operation(summary = "删除照片")
+    public Result<Void> deletePhoto(@PathVariable Integer id) {
+        log.info("删除照片: {}", id);
+        String url = photoService.deletePhoto(id);
+        ossService.delete(url);
+        return Result.success();
+    }
+
+    private Boolean isAdmin(){
+        Integer userId = BaseContext.getCurrentId();
+        User user = userService.query().eq("id", userId).one();
+        return user != null && user.getIsAdmin().equals("1");
     }
 }

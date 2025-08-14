@@ -108,6 +108,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
     }
 
 
+
     private LoginVO generateJWTToken(User user) {
         // 为用户生成jwt令牌
         Map<String,Object> claims = new HashMap<>();

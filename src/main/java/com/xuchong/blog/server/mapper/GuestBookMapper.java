@@ -1,11 +1,15 @@
 package com.xuchong.blog.server.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xuchong.blog.pojo.entity.db.GuestBook;
 import com.xuchong.blog.pojo.entity.OneGuestBook;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+
+import java.sql.Wrapper;
 
 @Mapper
 public interface GuestBookMapper extends BaseMapper<GuestBook> {
@@ -13,7 +17,7 @@ public interface GuestBookMapper extends BaseMapper<GuestBook> {
     @Select("SELECT gb.*, u.nick_name FROM guest_book gb " +
             "LEFT JOIN user u ON gb.user_id = u.id " +
             "ORDER BY gb.create_time DESC")
-    Page<OneGuestBook> selectGuestBookPage(Page<OneGuestBook> page);
+    Page<OneGuestBook> selectGuestBookPage(Page<OneGuestBook> page, @Param(Constants.WRAPPER) Wrapper wrapper);
 
 
 }

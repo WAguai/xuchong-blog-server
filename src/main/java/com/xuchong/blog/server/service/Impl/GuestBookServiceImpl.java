@@ -1,10 +1,12 @@
 package com.xuchong.blog.server.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xuchong.blog.common.result.Result;
 import com.xuchong.blog.pojo.dto.AddGuestBookMessageDTO;
+import com.xuchong.blog.pojo.entity.OneMoment;
 import com.xuchong.blog.pojo.entity.db.GuestBook;
 import com.xuchong.blog.pojo.entity.db.GuestComment;
 import com.xuchong.blog.pojo.entity.GuestComments;
@@ -53,11 +55,10 @@ public class GuestBookServiceImpl extends ServiceImpl<GuestBookMapper, GuestBook
     @Override
     public Result<?> getMessages(Integer currentPage,Integer pageSize) {
         log.info("获取留言板");
-        // 1. 分页查询留言[7]
+        // 1. 分页查询留言
         Page<OneGuestBook> page = new Page<>(currentPage, pageSize);
-        Page<OneGuestBook> guestBookPage = guestBookMapper.selectGuestBookPage(page);
+        Page<OneGuestBook> guestBookPage = guestBookMapper.selectGuestBookPage(page,null);
         List<OneGuestBook> guestBooks = guestBookPage.getRecords();
-        log.info("guestBooks,{}", guestBooks.size());
 
         // 2. 批量查询关联评论
         if (!guestBooks.isEmpty()) {
@@ -83,8 +84,8 @@ public class GuestBookServiceImpl extends ServiceImpl<GuestBookMapper, GuestBook
          // 4. 封装返回结果
         GetGuestBookVO vo = new GetGuestBookVO();
         vo.setGuestBooks(guestBooks);
-        vo.setTotalEntries((long)guestBooks.size());
-        log.info("一共{}条",(long)guestBooks.size());
+        vo.setTotalEntries(guestBookPage.getTotal());
+        log.info("一共{}条",guestBookPage.getTotal());
         return Result.success(vo);
     }
 

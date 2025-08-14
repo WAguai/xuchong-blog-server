@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
   profiles:
     active: dev
   application:
@@ -9,7 +13,6 @@ spring:
     username: root
     password: 123456
     database: xuchong_blog
-
   jackson:
     default-property-inclusion: non_null # JSON?????????
   data:

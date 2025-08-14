@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xuchong.blog.pojo.dto.AddPhotoDTO;
 import com.xuchong.blog.pojo.vo.PhotoVO;
 
+import java.util.List;
+
 public interface PhotoService {
     
     /**
@@ -24,5 +26,8 @@ public interface PhotoService {
     /**
      * 删除照片
      */
-    void deletePhoto(Integer id);
+    String deletePhoto(Integer id);
+
+
+    List<String> getRecentPhotos(Integer num);
 }

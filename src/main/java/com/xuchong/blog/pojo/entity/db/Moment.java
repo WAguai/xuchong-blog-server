@@ -16,6 +16,8 @@ public class Moment {
     private Integer id;
     private Integer userId;
     private String title;
+    private String tags;
+    private String introduction;
     private String content;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;

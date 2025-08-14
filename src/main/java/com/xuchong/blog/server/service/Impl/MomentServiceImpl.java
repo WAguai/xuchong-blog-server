@@ -51,6 +51,9 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment>  implem
         List<Integer> momentIds = momentPage.getRecords().stream()
                 .map(OneMoment::getId)
                 .collect(Collectors.toList());
+        if(momentIds.isEmpty()){
+            return Result.success("没有说说");
+        }
 
         // 3. 批量查询关联数据（避免N+1查询）
         Map<Integer, MomentComments> commentsMap = momentCommentMapper.selectCommentsByMomentIds(momentIds);
